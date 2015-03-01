@@ -1,2 +1,7 @@
 ---
 # vars file for bareos
+
+bareos_services:
+  - bareos-dir
+  - bareos-sd
+  - bareos-fd

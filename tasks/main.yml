@@ -12,3 +12,8 @@
 - include: Ubuntu.yml
   when: ansible_distribution == "Ubuntu"
   tags: bareos
+
+- name: Ensure bareos services are started and enabled on boot
+  service: name={{ item }} state=started enabled=yes
+  with_items: bareos_services
+  tags: bareos
