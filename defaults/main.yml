@@ -3,3 +3,9 @@
 
 bareos_version: 14.2
 bareos_database_backend: postgresql
+
+bareos_server: False
+bareos_client: True
+
+bareos_director_name: localhost-dir
+bareos_director_password: "RY4wN7EEgWnY4zkbXn25AE5DkzEf5DzeTiZGnd3YlmR6"

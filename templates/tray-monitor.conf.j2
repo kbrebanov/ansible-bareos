@@ -1,0 +1,29 @@
+#
+# Bareos Tray Monitor Configuration File
+#
+
+Monitor {
+  Name = localhost-mon
+  Password = "fJS5YDWFJF0e4IADEv3enEuELTXhWRzYF34ODBkAxO4M"         # password for the Directors
+  RefreshInterval = 30 seconds
+}
+
+Client {
+  Name = localhost-fd
+  Address = localhost
+  FDPort = 9102
+  Password = "UeIASD6nKye93XmKeUbaoxcbId+sq95cWWY8cHA7QCv5"          # password for FileDaemon
+}
+
+Storage {
+  Name = localhost-sd
+  Address = localhost
+  SDPort = 9103
+  Password = "4ilTf6Unyuysf8QyfpbI+iSFkQ5Ve+ZTOIrpOEG9LPvZ"          # password for StorageDaemon
+}
+
+Director {
+  Name = localhost-dir
+  DIRport = 9101
+  address = localhost
+}

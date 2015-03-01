@@ -1,0 +1,73 @@
+#
+# Default Bareos Storage Daemon Configuration file
+#
+#  For Bareos release 14.2.2 (12 December 2014) -- ubuntu Ubuntu 14.04 LTS
+#
+# You may need to change the name of your tape drive
+#   on the "Archive Device" directive in the Device
+#   resource.  If you change the Name and/or the
+#   "Media Type" in the Device resource, please ensure
+#   that dird.conf has corresponding changes.
+#
+
+Storage {                             # definition of myself
+  Name = localhost-sd
+  Maximum Concurrent Jobs = 20
+
+  # remove comment from "Plugin Directory" to load plugins from specified directory.
+  # if "Plugin Names" is defined, only the specified plugins will be loaded,
+  # otherwise all storage plugins (*-sd.so) from the "Plugin Directory".
+  #
+  # Plugin Directory = /usr/lib/bareos/plugins
+  # Plugin Names = ""
+}
+
+#
+# List Directors who are permitted to contact Storage daemon
+#
+Director {
+  Name = localhost-dir
+  Password = "n6YWZmhv7Upo3vYE5CQFRDge5L30cLXfEF3ztHoXRi14"
+}
+
+#
+# Restricted Director, used by tray-monitor to get the
+#   status of the storage daemon
+#
+Director {
+  Name = localhost-mon
+  Password = "3at08uq/7/N3AKlphpFUOQLY2BYv28MnJlJB7/+eJDjO"
+  Monitor = yes
+}
+
+#
+# Devices supported by this Storage daemon
+# To connect, the Director's bareos-dir.conf must have the same Name and MediaType.
+#
+Device {
+  Name = FileStorage
+  Media Type = File
+  Archive Device = /var/lib/bareos/storage
+  LabelMedia = yes;                   # lets Bareos label unlabeled media
+  Random Access = yes;
+  AutomaticMount = yes;               # when device opened, read it
+  RemovableMedia = no;
+  AlwaysOpen = no;
+}
+
+#
+# include additional configuration files, if required
+#
+
+# eg.
+#@/etc/bareos/bareos-sd.d/device-gluster.conf
+
+
+#
+# Send all messages to the Director,
+# mount messages also are sent to the email address
+#
+Messages {
+  Name = Standard
+  director = localhost-dir = all
+}

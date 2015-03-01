@@ -1,2 +1,14 @@
 ---
 # handlers file for bareos
+
+- name: restart bareos-fd
+  service: name=bareos-fd state=restarted
+  tags: bareos
+
+- name: restart bareos-dir
+  service: name=bareos-dir state=restarted
+  tags: bareos
+
+- name: restart bareos-sd
+  service: name=bareos-sd state=restarted
+  tags: bareos

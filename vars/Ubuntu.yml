@@ -2,6 +2,8 @@
 # vars file for bareos (Ubuntu specific)
 
 bareos_apt_repository_url: http://download.bareos.org/bareos/release/{{ bareos_version }}/xUbuntu_14.04
-bareos_packages:
+bareos_server_packages:
   - bareos
   - bareos-database-{{ bareos_database_backend }}
+bareos_client_packages:
+  - bareos-client

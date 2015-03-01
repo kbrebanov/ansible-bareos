@@ -13,7 +13,69 @@
   when: ansible_distribution == "Ubuntu"
   tags: bareos
 
-- name: Ensure bareos services are started and enabled on boot
+- name: Create bareos-dir configuration
+  template: >
+    src=bareos-dir.conf.j2
+    dest={{ bareos_configuration_directory }}/bareos-dir.conf
+    owner=bareos
+    group=bareos
+    mode=0640
+  notify: restart bareos-dir
+  when: bareos_server
+  tags: bareos
+
+- name: Create bareos-sd configuration
+  template: >
+    src=bareos-sd.conf.j2
+    dest={{ bareos_configuration_directory }}/bareos-sd.conf
+    owner=bareos
+    group=bareos
+    mode=0640
+  notify: restart bareos-sd
+  when: bareos_server
+  tags: bareos
+
+- name: Ensure bareos server services are started and enabled on boot
   service: name={{ item }} state=started enabled=yes
-  with_items: bareos_services
+  with_items: bareos_server_services
+  when: bareos_server
+  tags: bareos
+
+- name: Create bareos-fd configuration
+  template: >
+    src=bareos-fd.conf.j2
+    dest={{ bareos_configuration_directory }}/bareos-fd.conf
+    owner=root
+    group=bareos
+    mode=0640
+  notify: restart bareos-fd
+  when: bareos_client
+  tags: bareos
+
+- name: Create bconsole configuration
+  template: >
+    src=bconsole.conf.j2
+    dest={{ bareos_configuration_directory }}/bconsole.conf
+    owner=root
+    group=bareos
+    mode=0640
+  notify: restart bareos-fd
+  when: bareos_client
+  tags: bareos
+
+- name: Create tray-monitor configuration
+  template: >
+    src=tray-monitor.conf.j2
+    dest={{ bareos_configuration_directory }}/tray-monitor.conf
+    owner=root
+    group=bareos
+    mode=0640
+  notify: restart bareos-fd
+  when: bareos_client
+  tags: bareos
+
+- name: Ensure bareos client services are started and enabled on boot
+  service: name={{ item }} state=started enabled=yes
+  with_items: bareos_client_services
+  when: bareos_client
   tags: bareos
