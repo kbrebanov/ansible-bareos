@@ -1,0 +1,19 @@
+---
+# tasks file for bareos (Ubuntu specific)
+
+- name: Add bareos APT repository
+  apt_repository: >
+    repo='deb {{ bareos_apt_repository_url }} /'
+    state=present
+  tags: bareos
+
+- name: Add bareos APT repository key
+  apt_key: >
+    url={{ bareos_apt_repository_url }}/Release.key
+    state=present
+  tags: bareos
+
+- name: Install bareos packages
+  apt: name={{ item }} state=present update_cache=yes
+  with_items: bareos_packages
+  tags: bareos

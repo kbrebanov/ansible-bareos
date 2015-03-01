@@ -1,2 +1,5 @@
 ---
 # defaults file for bareos
+
+bareos_version: 14.2
+bareos_database_backend: postgresql
