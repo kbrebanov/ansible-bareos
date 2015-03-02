@@ -1,3 +1,5 @@
+# {{ ansible_managed }}
+
 #
 # Default Bareos Director configuration file for disk-only backup
 # (C) 2013-2014 Bareos GmbH & Co.KG
@@ -48,12 +50,12 @@
 #
 #
 Director {                            # define myself
-  Name = localhost-dir
-  QueryFile = "/usr/lib/bareos/scripts/query.sql"
-  Maximum Concurrent Jobs = 10
-  Password = "gcEnV7g23/nrUfqjaclJtxGjyMVZnPOAgGmEeXNJG+pk"         # Console password
-  Messages = Daemon
-  Auditing = yes
+  Name = {{ bareos_server_director_name }}
+  QueryFile = "{{ bareos_server_director_query_file }}"
+  Maximum Concurrent Jobs = {{ bareos_server_director_maximum_concurrent_jobs }}
+  Password = "{{ bareos_server_director_password }}"         # Console password
+  Messages = {{ bareos_server_director_messages }}
+  Auditing = {{ bareos_server_director_auditing }}
 
   # remove comment in next line to load dynamic backends from specified directory
   # Backend Directory = /usr/lib/bareos/backends
@@ -67,69 +69,30 @@ Director {                            # define myself
 }
 
 JobDefs {
-  Name = "DefaultJob"
-  Type = Backup
-  Level = Incremental
-  Client = localhost-fd
-  FileSet = "SelfTest"                     # selftest fileset                            (#13)
-  Schedule = "WeeklyCycle"
-  Storage = File
-  Messages = Standard
-  Pool = Incremental
-  Priority = 10
-  Write Bootstrap = "/var/lib/bareos/%c.bsr"
-  Full Backup Pool = Full                  # write Full Backups into "Full" Pool         (#05)
-  Differential Backup Pool = Differential  # write Diff Backups into "Differential" Pool (#08)
-  Incremental Backup Pool = Incremental    # write Incr Backups into "Incremental" Pool  (#11)
+  Name = "{{ bareos_server_jobdefs_name }}"
+  Type = {{ bareos_server_jobdefs_type }}
+  Level = {{ bareos_server_jobdefs_level }}
+  Client = {{ bareos_server_jobdefs_client }}
+  FileSet = "{{ bareos_server_jobdefs_fileset }}"                     # selftest fileset                            (#13)
+  Schedule = "{{ bareos_server_jobdefs_schedule }}"
+  Storage = {{ bareos_server_jobdefs_storage }}
+  Messages = {{ bareos_server_jobdefs_messages }}
+  Pool = {{ bareos_server_jobdefs_pool }}
+  Priority = {{ bareos_server_jobdefs_priority }}
+  Write Bootstrap = "{{ bareos_server_jobdefs_write_bootstrap }}"
+  Full Backup Pool = {{ bareos_server_jobdefs_full_backup_pool }}                  # write Full Backups into "Full" Pool         (#05)
+  Differential Backup Pool = {{ bareos_server_jobdefs_differential_backup_pool }}  # write Diff Backups into "Differential" Pool (#08)
+  Incremental Backup Pool = {{ bareos_server_jobdefs_incremental_backup_pool }}    # write Incr Backups into "Incremental" Pool  (#11)
 }
 
-#
-# Define the main nightly save backup job
-#   By default, this job will back up to disk in /var/lib/bareos/storage
+{% for job in bareos_server_jobs %}
 Job {
-  Name = "BackupClient1"
-  JobDefs = "DefaultJob"
+  {% for item, value in job.iteritems() -%}
+    {{ item }} = {{ value }}
+  {% endfor %}
 }
 
-#
-# Backup the catalog database (after the nightly save)
-#
-Job {
-  Name = "BackupCatalog"
-  JobDefs = "DefaultJob"
-  Level = Full
-  FileSet="Catalog"
-  Schedule = "WeeklyCycleAfterBackup"
-
-  # This creates an ASCII copy of the catalog
-  # Arguments to make_catalog_backup.pl are:
-  #  make_catalog_backup.pl <catalog-name>
-  RunBeforeJob = "/usr/lib/bareos/scripts/make_catalog_backup.pl MyCatalog"
-
-  # This deletes the copy of the catalog
-  RunAfterJob  = "/usr/lib/bareos/scripts/delete_catalog_backup"
-
-  # This sends the bootstrap via mail for disaster recovery.
-  # Should be sent to another system, please change recipient accordingly
-  Write Bootstrap = "|/usr/bin/bsmtp -h localhost -f \"\(Bareos\) \" -s \"Bootstrap for Job %j\" root@localhost" # (#01)
-  Priority = 11                   # run after main backup
-}
-
-#
-# Standard Restore template, to be changed by Console program
-#  Only one such job is needed for all Jobs/Clients/Storage ...
-#
-Job {
-  Name = "RestoreFiles"
-  Type = Restore
-  Client=localhost-fd
-  FileSet = "Linux All"
-  Storage = File
-  Pool = Incremental
-  Messages = Standard
-  Where = /tmp/bareos-restores
-}
-
+{% endfor -%}
 
 FileSet {
   Name = "Windows All Drives"
@@ -244,7 +207,7 @@ Storage {
 Catalog {
   Name = MyCatalog
   # Uncomment the following lines if you want the dbi driver
-  # dbdriver = "dbi:postgresql"; dbaddress = 127.0.0.1; dbport =  
+  # dbdriver = "dbi:postgresql"; dbaddress = 127.0.0.1; dbport =
   #dbdriver = "postgresql"
   dbdriver = "postgresql"
   dbname = "bareos"

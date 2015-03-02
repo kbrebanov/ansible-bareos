@@ -1,3 +1,5 @@
+# {{ ansible_managed }}
+
 #
 # Bareos Tray Monitor Configuration File
 #
@@ -23,7 +25,7 @@ Storage {
 }
 
 Director {
-  Name = localhost-dir
+  Name = {{ bareos_server_director_name }}
   DIRport = 9101
   address = localhost
 }

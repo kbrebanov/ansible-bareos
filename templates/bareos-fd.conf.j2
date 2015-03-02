@@ -1,3 +1,5 @@
+# {{ ansible_managed }}
+
 #
 # Default  Bareos File Daemon Configuration file
 #
@@ -11,8 +13,8 @@
 # List Directors who are permitted to contact this File daemon
 #
 Director {
-  Name = localhost-dir
-  Password = "iEvxCr+Tt3kYy5SkM8aq7Nwlxwjf8jsXOXXDvVkP3DMA"
+  Name = {{ bareos_server_director_name }}
+  Password = "{{ bareos_server_director_password }}"
 }
 
 #

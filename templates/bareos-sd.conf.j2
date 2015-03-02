@@ -1,3 +1,5 @@
+# {{ ansible_managed }}
+
 #
 # Default Bareos Storage Daemon Configuration file
 #
@@ -26,8 +28,8 @@ Storage {                             # definition of myself
 # List Directors who are permitted to contact Storage daemon
 #
 Director {
-  Name = localhost-dir
-  Password = "n6YWZmhv7Upo3vYE5CQFRDge5L30cLXfEF3ztHoXRi14"
+  Name = {{ bareos_server_director_name }}
+  Password = "{{ bareos_server_director_password }}"
 }
 
 #

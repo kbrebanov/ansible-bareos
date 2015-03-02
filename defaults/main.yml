@@ -7,5 +7,45 @@ bareos_database_backend: postgresql
 bareos_server: False
 bareos_client: True
 
-bareos_director_name: localhost-dir
-bareos_director_password: "RY4wN7EEgWnY4zkbXn25AE5DkzEf5DzeTiZGnd3YlmR6"
+bareos_server_director_name: localhost-dir
+bareos_server_director_password: "RY4wN7EEgWnY4zkbXn25AE5DkzEf5DzeTiZGnd3YlmR6"
+bareos_server_director_query_file: /usr/lib/bareos/scripts/query.sql
+bareos_server_director_maximum_concurrent_jobs: 10
+bareos_server_director_messages: Daemon
+bareos_server_director_auditing: "yes"
+
+bareos_server_jobdefs_name: DefaultJob
+bareos_server_jobdefs_type: Backup
+bareos_server_jobdefs_level: Incremental
+bareos_server_jobdefs_client: localhost-fd
+bareos_server_jobdefs_fileset: SelfTest
+bareos_server_jobdefs_schedule: WeeklyCycle
+bareos_server_jobdefs_storage: File
+bareos_server_jobdefs_messages: Standard
+bareos_server_jobdefs_pool: Incremental
+bareos_server_jobdefs_priority: 10
+bareos_server_jobdefs_write_bootstrap: /var/lib/bareos/%c.bsr
+bareos_server_jobdefs_full_backup_pool: Full
+bareos_server_jobdefs_differential_backup_pool: Differential
+bareos_server_jobdefs_incremental_backup_pool: Incremental
+
+bareos_server_jobs:
+  - Name: BackupClient1
+    JobDefs: DefaultJob
+  - Name: BackupCatalog
+    JobDefs: DefaultJob
+    Level: Full
+    FileSet: Catalog
+    Schedule: WeeklyCycleAfterBackup
+    RunBeforeJob: usr/lib/bareos/scripts/make_catalog_backup.pl MyCatalog
+    RunAferJob: /usr/lib/bareos/scripts/delete_catalog_backup
+    Write Bootstrap: '|/usr/bin/bsmtp -h localhost -f \"\(Bareos\) \" -s \"Bootstrap for Job %j\" root@localhost'
+    Priority: 11
+  - Name: RestoreFiles
+    Type: Restore
+    Client: localhost-fd
+    FileSet: Linux All
+    Storage: File
+    Pool: Incremental
+    Messages: Standard
+    Where: /tmp/bareos-restores

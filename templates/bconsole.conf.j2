@@ -1,10 +1,12 @@
+# {{ ansible_managed }}
+
 #
 # Bareos User Agent (or Console) Configuration File
 #
 
 Director {
-  Name = localhost-dir
+  Name = {{ bareos_server_director_name }}
   DIRport = 9101
   address = localhost
-  Password = "Jyx6uhKmJr7FjkCuXh+EgYXIN7q6kjNVgX14bClxmDs1"
+  Password = "{{ bareos_server_director_password }}"
 }
