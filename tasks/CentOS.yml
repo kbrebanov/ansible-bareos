@@ -1,2 +1,23 @@
 ---
 # tasks file for bareos (CentOS specific)
+
+- name: Add bareos YUM repository
+  template: >
+    src=bareos.repo.j2
+    dest=/etc/yum.repos.d/bareos.repo
+    owner=root
+    group=root
+    mode=0644
+  tags: bareos
+
+- name: Install bareos server packages
+  yum: name={{ item }} state=present
+  with_items: bareos_server_packages
+  when: bareos_server
+  tags: bareos
+
+- name: Install bareos client packages
+  yum: name={{ item }} state=present
+  with_items: bareos_client_packages
+  when: bareos_client
+  tags: bareos

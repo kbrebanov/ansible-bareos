@@ -3,13 +3,13 @@
 
 - name: Add bareos APT repository
   apt_repository: >
-    repo='deb {{ bareos_apt_repository_url }} /'
+    repo='deb {{ bareos_repository_url }} /'
     state=present
   tags: bareos
 
 - name: Add bareos APT repository key
   apt_key: >
-    url={{ bareos_apt_repository_url }}/Release.key
+    url={{ bareos_repository_url }}/Release.key
     state=present
   tags: bareos
 

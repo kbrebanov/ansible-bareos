@@ -1,0 +1,7 @@
+[bareos_bareos-{{ bareos_version }}]
+name=Backup Archiving Recovery Open Sourced Next stable
+type=rpm-md
+baseurl={{ bareos_repository_url }}
+gpgcheck=1
+gpgkey={{ bareos_repository_url }}/repodata/repomd.xml.key
+enabled=1

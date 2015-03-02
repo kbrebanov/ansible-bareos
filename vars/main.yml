@@ -2,6 +2,11 @@
 # vars file for bareos
 
 bareos_configuration_directory: /etc/bareos
+bareos_server_packages:
+  - bareos
+  - bareos-database-{{ bareos_database_backend }}
+bareos_client_packages:
+  - bareos-client
 bareos_server_services:
   - bareos-dir
   - bareos-sd
