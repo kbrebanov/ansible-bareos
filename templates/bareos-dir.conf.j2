@@ -50,12 +50,12 @@
 #
 #
 Director {                            # define myself
-  Name = {{ bareos_server_director_name }}
+  Name = "{{ bareos_server_director_name }}"
   QueryFile = "{{ bareos_server_director_query_file }}"
-  Maximum Concurrent Jobs = {{ bareos_server_director_maximum_concurrent_jobs }}
+  Maximum Concurrent Jobs = "{{ bareos_server_director_maximum_concurrent_jobs }}"
   Password = "{{ bareos_server_director_password }}"         # Console password
-  Messages = {{ bareos_server_director_messages }}
-  Auditing = {{ bareos_server_director_auditing }}
+  Messages = "{{ bareos_server_director_messages }}"
+  Auditing = "{{ bareos_server_director_auditing }}"
 
   # remove comment in next line to load dynamic backends from specified directory
   # Backend Directory = /usr/lib/bareos/backends
@@ -70,25 +70,25 @@ Director {                            # define myself
 
 JobDefs {
   Name = "{{ bareos_server_jobdefs_name }}"
-  Type = {{ bareos_server_jobdefs_type }}
-  Level = {{ bareos_server_jobdefs_level }}
-  Client = {{ bareos_server_jobdefs_client }}
+  Type = "{{ bareos_server_jobdefs_type }}"
+  Level = "{{ bareos_server_jobdefs_level }}"
+  Client = "{{ bareos_server_jobdefs_client }}"
   FileSet = "{{ bareos_server_jobdefs_fileset }}"                     # selftest fileset                            (#13)
   Schedule = "{{ bareos_server_jobdefs_schedule }}"
-  Storage = {{ bareos_server_jobdefs_storage }}
-  Messages = {{ bareos_server_jobdefs_messages }}
-  Pool = {{ bareos_server_jobdefs_pool }}
-  Priority = {{ bareos_server_jobdefs_priority }}
+  Storage = "{{ bareos_server_jobdefs_storage }}"
+  Messages = "{{ bareos_server_jobdefs_messages }}"
+  Pool = "{{ bareos_server_jobdefs_pool }}"
+  Priority = "{{ bareos_server_jobdefs_priority }}"
   Write Bootstrap = "{{ bareos_server_jobdefs_write_bootstrap }}"
-  Full Backup Pool = {{ bareos_server_jobdefs_full_backup_pool }}                  # write Full Backups into "Full" Pool         (#05)
-  Differential Backup Pool = {{ bareos_server_jobdefs_differential_backup_pool }}  # write Diff Backups into "Differential" Pool (#08)
-  Incremental Backup Pool = {{ bareos_server_jobdefs_incremental_backup_pool }}    # write Incr Backups into "Incremental" Pool  (#11)
+  Full Backup Pool = "{{ bareos_server_jobdefs_full_backup_pool }}"                  # write Full Backups into "Full" Pool         (#05)
+  Differential Backup Pool = "{{ bareos_server_jobdefs_differential_backup_pool }}"  # write Diff Backups into "Differential" Pool (#08)
+  Incremental Backup Pool = "{{ bareos_server_jobdefs_incremental_backup_pool }}"    # write Incr Backups into "Incremental" Pool  (#11)
 }
 
 {% for job in bareos_server_jobs %}
 Job {
   {% for item, value in job.iteritems() -%}
-    {{ item }} = {{ value }}
+    {{ item }} = "{{ value }}"
   {% endfor %}
 }
 

@@ -37,7 +37,7 @@ bareos_server_jobs:
     Level: Full
     FileSet: Catalog
     Schedule: WeeklyCycleAfterBackup
-    RunBeforeJob: usr/lib/bareos/scripts/make_catalog_backup.pl MyCatalog
+    RunBeforeJob: /usr/lib/bareos/scripts/make_catalog_backup.pl MyCatalog
     RunAfterJob: /usr/lib/bareos/scripts/delete_catalog_backup
     Write Bootstrap: '|/usr/bin/bsmtp -h localhost -f \"\(Bareos\) \" -s \"Bootstrap for Job %j\" root@localhost'
     Priority: 11
