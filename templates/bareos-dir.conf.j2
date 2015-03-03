@@ -154,18 +154,14 @@ FileSet {
   }
 }
 
+{% for schedule in bareos_server_schedules %}
 Schedule {
-  Name = "WeeklyCycle"
-  Run = Full 1st sat at 21:00                   # (#04)
-  Run = Differential 2nd-5th sat at 21:00       # (#07)
-  Run = Incremental mon-fri at 21:00            # (#10)
+  {% for item in schedule -%}
+    {{ item }}
+  {% endfor %}
 }
 
-# This schedule does the catalog. It starts after the WeeklyCycle
-Schedule {
-  Name = "WeeklyCycleAfterBackup"
-  Run = Full mon-fri at 21:10
-}
+{% endfor -%}
 
 # This is the backup of the catalog
 FileSet {
