@@ -12,12 +12,12 @@
 
 - name: Install bareos server packages
   yum: name={{ item }} state=present
-  with_items: bareos_server_packages
+  with_items: "{{bareos_server_packages}}"
   when: bareos_server
   tags: bareos
 
 - name: Install bareos client packages
   yum: name={{ item }} state=present
-  with_items: bareos_client_packages
+  with_items: "{{bareos_client_packages}}"
   when: bareos_client
   tags: bareos

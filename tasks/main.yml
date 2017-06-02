@@ -37,7 +37,7 @@
 
 - name: Ensure bareos server services are started and enabled on boot
   service: name={{ item }} state=started enabled=yes
-  with_items: bareos_server_services
+  with_items: "{{bareos_server_services}}"
   when: bareos_server
   tags: bareos
 
@@ -76,6 +76,6 @@
 
 - name: Ensure bareos client services are started and enabled on boot
   service: name={{ item }} state=started enabled=yes
-  with_items: bareos_client_services
+  with_items: "{{bareos_client_services}}"
   when: bareos_client
   tags: bareos

@@ -15,12 +15,12 @@
 
 - name: Install bareos server packages
   apt: name={{ item }} state=present update_cache=yes
-  with_items: bareos_server_packages
+  with_items: "{{bareos_server_packages}}"
   when: bareos_server
   tags: bareos
 
 - name: Install bareos client packages
   apt: name={{ item }} state=present update_cache=yes
-  with_items: bareos_client_packages
+  with_items: "{{bareos_client_packages}}"
   when: bareos_client
   tags: bareos
