@@ -1,0 +1,21 @@
+---
+- name: Check database is created
+  command: "bash -c 'psql -l | grep bareos | wc -l | grep 1'"
+  when: bareos_server
+  register: database_created
+  become_user: postgres
+- name: Prepare database
+  command: "/usr/lib/bareos/scripts/create_bareos_database || true"
+  become_user: postgres
+  when: bareos_server and not database_created
+  tags: bareos
+- name: Prepare database
+  command: "/usr/lib/bareos/scripts/make_bareos_tables || true"
+  become_user: postgres
+  when: bareos_server and not database_created
+  tags: bareos
+- name: Prepare database
+  command: "/usr/lib/bareos/scripts/grant_bareos_privileges || true"
+  become_user: postgres
+  when: bareos_server and not database_created
+  tags: bareos

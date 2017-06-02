@@ -13,6 +13,10 @@
   when: ansible_distribution == "Ubuntu"
   tags: bareos
 
+- include: Postgresql.yml
+  when: bareos_database_backend == "postgresql"
+  tags: bareos
+
 - name: Create bareos-dir configuration
   template: >
     src=bareos-dir.conf.j2
